@@ -39,7 +39,7 @@ class _CreateScreenState extends State<CreateScreen> {
             quality: 100,
             name: captureTimestamp
           );
-          notifyUserWithSnackBar('QR code saved!', 1500);
+          notifyUserWithSnackBar('QR code saved in your gallery!', 1500);
         }
       });
     else
