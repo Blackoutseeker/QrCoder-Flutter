@@ -3,7 +3,7 @@ description: A simple app to scan, copy, open, create and save QR codes.
 
 publish_to: "none"
 
-version: 1.0.0
+version: 1.1.1
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -14,6 +14,8 @@ dependencies:
 
   qr_flutter: ^4.0.0
   qr_code_scanner: 0.4.0
+  qr_code_tools: ^0.0.7
+  image_picker: 0.8.2
   screenshot: ^1.2.3
   image_gallery_saver: ^1.6.9
   permission_handler: 6.0.1+1
