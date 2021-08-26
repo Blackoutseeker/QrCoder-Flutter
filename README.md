@@ -6,7 +6,7 @@
 
 </p>
 
-![version](https://img.shields.io/badge/Version-1.0.0-C00C00)
+![version](https://img.shields.io/badge/Version-1.1.1-C00C00)
 ![flutter](https://img.shields.io/badge/Flutter-2.2.3-1389FD)
 
 ## Description
@@ -19,11 +19,11 @@
 
 <br>
 
-### Scan QR codes and barcodes. You can also copy and open them!
+### Scan QR codes and barcodes (also from your gallery). You can also copy and open them!
 
 <br>
 
-<img src="https://user-images.githubusercontent.com/56811005/130373177-26b15f88-0cff-4f34-b8cc-5e3f5e8aea6b.jpg" width="250">
+<img src="https://user-images.githubusercontent.com/56811005/130913012-e74961e3-92d2-4572-8095-2d83fd027dda.jpg" width="250">
 
 <br>
 
