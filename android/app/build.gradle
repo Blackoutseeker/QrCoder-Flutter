@@ -32,6 +32,8 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
+    lintOptions.abortOnError false
+
     compileSdkVersion 30
 
     sourceSets {
