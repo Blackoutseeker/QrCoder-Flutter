@@ -41,7 +41,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.felipstudio.qrcoder"
+        applicationId "com.FelipsTudio.qrcoder"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
