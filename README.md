@@ -9,6 +9,12 @@
 ![version](https://img.shields.io/badge/Version-1.2.2-C00C00)
 ![flutter](https://img.shields.io/badge/Flutter-2.2.3-1389FD)
 
+<a style="outline: none;" href='https://play.google.com/store/apps/details?id=com.FelipsTudio.qrcoder&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
+
+<img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width="250"/>
+
+</a>
+
 ## Description
 
 ### A simple app to scan, copy, open, create and save QR codes.
