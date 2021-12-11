@@ -90,6 +90,8 @@ class _ScanScreenState extends State<ScanScreen> {
 
   @override
   Widget build(BuildContext context) {
+    FocusScope.of(context).requestFocus(FocusNode());
+
     if (cameraPermissionStatus.isGranted)
       return Stack(
         fit: StackFit.expand,

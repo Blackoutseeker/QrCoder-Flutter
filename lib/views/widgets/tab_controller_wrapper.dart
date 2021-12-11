@@ -11,7 +11,7 @@ class TabControllerWrapper extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          toolbarHeight: 48,
+          toolbarHeight: 0,
           bottom: const TabBar(
             indicatorPadding: const EdgeInsets.symmetric(
               horizontal: 20

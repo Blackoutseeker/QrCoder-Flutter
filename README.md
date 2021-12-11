@@ -6,7 +6,7 @@
 
 </p>
 
-![version](https://img.shields.io/badge/Version-1.2.1-C00C00)
+![version](https://img.shields.io/badge/Version-1.2.2-C00C00)
 ![flutter](https://img.shields.io/badge/Flutter-2.2.3-1389FD)
 
 ## Description

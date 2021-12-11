@@ -10,6 +10,7 @@ class Input extends StatelessWidget {
     return TextField(
       controller: _textEditingController,
       onSubmitted: (_) => _saveQrCode(),
+      maxLength: 1050,
       cursorColor: Theme.of(context).accentColor,
       keyboardType: TextInputType.url,
       style: const TextStyle(
