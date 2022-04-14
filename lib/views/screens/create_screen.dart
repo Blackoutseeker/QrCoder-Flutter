@@ -5,6 +5,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:qrcoder/views/widgets/input.dart';
 import 'package:qrcoder/views/widgets/save_button.dart';
@@ -19,6 +21,12 @@ class CreateScreen extends StatefulWidget {
 class _CreateScreenState extends State<CreateScreen> {
   final TextEditingController _textEditingController = TextEditingController();
   final ScreenshotController _screenshotController = ScreenshotController();
+  final BannerAd _bannerAd = BannerAd(
+    adUnitId: dotenv.env['BANNER_AD_UNIT_ID']!,
+    size: AdSize.banner,
+    request: AdRequest(),
+    listener: BannerAdListener(),
+  );
 
   PermissionStatus _storagePermissionStatus = PermissionStatus.denied;
 
@@ -78,11 +86,14 @@ class _CreateScreenState extends State<CreateScreen> {
     final bool notHaveStoragePermission =
         _storagePermissionStatus != PermissionStatus.granted;
     if (notHaveStoragePermission) _requestStoragePermission();
+
+    _bannerAd.load();
   }
 
   @override
   void dispose() {
     _textEditingController.dispose();
+    _bannerAd.dispose();
     super.dispose();
   }
 
@@ -91,8 +102,13 @@ class _CreateScreenState extends State<CreateScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
+        SizedBox(
+          child: AdWidget(ad: _bannerAd),
+          width: _bannerAd.size.width.toDouble(),
+          height: _bannerAd.size.height.toDouble(),
+        ),
         Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Input(_textEditingController, _saveQrCode),
         ),
         const SizedBox(height: 20),
