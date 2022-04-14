@@ -6,8 +6,8 @@
 
 </p>
 
-![version](https://img.shields.io/badge/Version-1.2.2-C00C00)
-![flutter](https://img.shields.io/badge/Flutter-2.2.3-1389FD)
+![version](https://img.shields.io/badge/Version-1.3.2-C00C00)
+![flutter](https://img.shields.io/badge/Flutter-2.10.4-1389FD)
 
 <a style="outline: none;" href='https://play.google.com/store/apps/details?id=com.FelipsTudio.qrcoder&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
 
