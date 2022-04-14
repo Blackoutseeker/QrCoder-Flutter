@@ -25,6 +25,7 @@ dependencies:
       url: https://github.com/SuaMusica/googleads-mobile-flutter.git
       path: packages/google_mobile_ads
       ref: feature/suamusica
+  flutter_dotenv: ^5.0.2
 
 flutter:
   uses-material-design: true
