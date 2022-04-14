@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class SaveButton extends StatelessWidget {
   final VoidCallback _saveQrCode;
+
   const SaveButton(this._saveQrCode);
 
   @override
@@ -10,14 +11,14 @@ class SaveButton extends StatelessWidget {
       onPressed: _saveQrCode,
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(
-          Theme.of(context).accentColor
+          Theme.of(context).colorScheme.secondary,
         ),
         padding: MaterialStateProperty.all<EdgeInsets>(
-          const EdgeInsets.all(0)
-        )
+          const EdgeInsets.all(0),
+        ),
       ),
       child: Row(
-        children: <Widget> [
+        children: <Widget>[
           Expanded(
             child: Container(
               height: 50,
@@ -26,22 +27,22 @@ class SaveButton extends StatelessWidget {
                   'Save',
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 22
-                  )
-                )
-              )
-            )
+                    fontSize: 22,
+                  ),
+                ),
+              ),
+            ),
           ),
           Container(
             height: 50,
             width: 50,
             color: const Color.fromRGBO(0, 0, 0, 0.5),
             child: const Center(
-              child: const Icon(Icons.save)
-            )
-          )
-        ]
-      )
+              child: const Icon(Icons.save),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

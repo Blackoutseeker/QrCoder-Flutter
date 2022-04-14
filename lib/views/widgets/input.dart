@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class Input extends StatelessWidget {
   final TextEditingController _textEditingController;
   final VoidCallback _saveQrCode;
+
   const Input(this._textEditingController, this._saveQrCode);
 
   @override
@@ -11,11 +12,11 @@ class Input extends StatelessWidget {
       controller: _textEditingController,
       onSubmitted: (_) => _saveQrCode(),
       maxLength: 1050,
-      cursorColor: Theme.of(context).accentColor,
+      cursorColor: Theme.of(context).colorScheme.secondary,
       keyboardType: TextInputType.url,
       style: const TextStyle(
         color: Colors.white,
-        fontSize: 20
+        fontSize: 20,
       ),
       decoration: InputDecoration(
         hintText: 'Write a text',
@@ -24,15 +25,15 @@ class Input extends StatelessWidget {
         fillColor: Theme.of(context).inputDecorationTheme.fillColor,
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(
-            color: Theme.of(context).accentColor
-          )
+            color: Theme.of(context).colorScheme.secondary,
+          ),
         ),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
-            color: Theme.of(context).accentColor
-          )
-        )
-      )
+            color: Theme.of(context).colorScheme.secondary,
+          ),
+        ),
+      ),
     );
   }
 }
