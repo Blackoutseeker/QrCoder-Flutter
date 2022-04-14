@@ -1,11 +1,15 @@
 // @dart=2.9
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'package:qrcoder/themes/themes.dart';
 import 'package:qrcoder/views/widgets/tab_controller_wrapper.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
+
   runApp(const App());
 }
 
