@@ -53,6 +53,15 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  google_mobile_ads:
+    dependency: "direct main"
+    description:
+      path: "packages/google_mobile_ads"
+      ref: "feature/suamusica"
+      resolved-ref: b2051250b83633c5d3a533c6c82bee8728243ec6
+      url: "https://github.com/SuaMusica/googleads-mobile-flutter.git"
+    source: git
+    version: "1.0.1"
   http:
     dependency: transitive
     description:

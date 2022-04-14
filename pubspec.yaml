@@ -3,7 +3,7 @@ description: A simple app to scan, copy, open, create and save QR codes.
 
 publish_to: "none"
 
-version: 1.2.2
+version: 1.3.2
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -20,7 +20,11 @@ dependencies:
   image_gallery_saver: ^1.6.9
   permission_handler: ^8.1.4+2
   url_launcher: ^6.0.9
-  google_mobile_ads: ^1.2.0
+  google_mobile_ads:
+    git:
+      url: https://github.com/SuaMusica/googleads-mobile-flutter.git
+      path: packages/google_mobile_ads
+      ref: feature/suamusica
 
 flutter:
   uses-material-design: true
