@@ -1,88 +1,85 @@
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:qr_code_tools/qr_code_tools.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import 'package:qrcoder/utils/constants.dart';
 import 'package:qrcoder/views/widgets/grant_permission_button.dart';
 import 'package:qrcoder/views/widgets/custom_dialog.dart';
 
 class ScanScreen extends StatefulWidget {
-  const ScanScreen();
+  const ScanScreen({super.key});
 
   @override
-  _ScanScreenState createState() => _ScanScreenState();
+  State<ScanScreen> createState() => _ScanScreenState();
 }
 
 class _ScanScreenState extends State<ScanScreen> {
-  final GlobalKey _qrViewKey = GlobalKey();
   final ImagePicker _imagePicker = ImagePicker();
+
   final BannerAd _bannerAd = BannerAd(
-    adUnitId: dotenv.env['BANNER_AD_UNIT_ID']!,
+    adUnitId: Constants.bannerAdId,
     size: AdSize.banner,
-    request: AdRequest(),
-    listener: BannerAdListener(),
+    request: const AdRequest(),
+    listener: const BannerAdListener(),
   );
 
-  QRViewController? _qrViewController;
+  final MobileScannerController _mobileScannerController =
+      MobileScannerController(detectionSpeed: DetectionSpeed.noDuplicates);
+
   PermissionStatus _cameraPermissionStatus = PermissionStatus.denied;
-  bool _isFlashlightOff = false;
 
   Future<void> _showCustomDialog(String barcodeText) async {
-    final bool canLaunchUrl = await canLaunch(barcodeText);
-    showDialog(
-      context: context,
-      builder: (_) => CustomDialog(
-        barcodeText,
-        canLaunchUrl,
-        _qrViewController!.resumeCamera,
-      ),
-      barrierDismissible: false,
-      useSafeArea: true,
-    );
+    final bool canLaunchQrCodeText = await canLaunchUrl(Uri.parse(barcodeText));
+    if (mounted) {
+      showDialog(
+        context: context,
+        builder: (_) => CustomDialog(
+          barcodeText,
+          canLaunchQrCodeText,
+          _mobileScannerController.start,
+        ),
+        barrierDismissible: false,
+        useSafeArea: true,
+      );
+    }
   }
 
-  void _onQRViewCreated(QRViewController qrViewController) {
-    setState(() {
-      this._qrViewController = qrViewController;
-    });
-    qrViewController.scannedDataStream.listen((Barcode barcode) async {
-      await qrViewController.pauseCamera();
-      _showCustomDialog(barcode.code);
-    });
+  Future<void> _onBarcodeDetect(BarcodeCapture capture) async {
+    final String? barcodeText = capture.barcodes.first.rawValue;
+    if (barcodeText != null) {
+      await _showCustomDialog(barcodeText);
+    }
   }
 
   Future<void> _toggleCameraFlash() async {
-    await _qrViewController?.toggleFlash();
-    setState(() {
-      this._isFlashlightOff = !this._isFlashlightOff;
-    });
+    await _mobileScannerController.toggleTorch();
   }
 
   Future<void> _flipCamera() async {
-    await _qrViewController?.flipCamera();
+    await _mobileScannerController.switchCamera();
   }
 
   Future<void> _scanImageFromGallery() async {
-    await _qrViewController?.pauseCamera();
+    await _mobileScannerController.stop();
     final XFile? image =
         await _imagePicker.pickImage(source: ImageSource.gallery);
     if (image != null) {
-      String barcodeText = await QrCodeToolsPlugin.decodeFrom(image.path);
+      String barcodeText = await scanner.scanPath(image.path);
       _showCustomDialog(barcodeText);
-    } else
-      _qrViewController?.resumeCamera();
+    } else {
+      await _mobileScannerController.start();
+    }
   }
 
   Future<void> _requestCameraPermission() async {
     await Permission.camera
         .request()
         .then((PermissionStatus permissionStatus) => {
-              this.setState(() {
+              setState(() {
                 _cameraPermissionStatus = permissionStatus;
               })
             });
@@ -101,7 +98,8 @@ class _ScanScreenState extends State<ScanScreen> {
 
   @override
   void dispose() {
-    _qrViewController?.dispose();
+    _mobileScannerController.dispose();
+    _mobileScannerController.torchState.dispose();
     _bannerAd.dispose();
     super.dispose();
   }
@@ -110,22 +108,21 @@ class _ScanScreenState extends State<ScanScreen> {
   Widget build(BuildContext context) {
     FocusScope.of(context).requestFocus(FocusNode());
 
-    if (_cameraPermissionStatus.isGranted)
+    if (_cameraPermissionStatus.isGranted) {
       return Stack(
         fit: StackFit.expand,
         alignment: AlignmentDirectional.bottomCenter,
         children: <Widget>[
-          QRView(
-            key: _qrViewKey,
-            onQRViewCreated: _onQRViewCreated,
-            overlay: QrScannerOverlayShape(borderColor: Colors.white),
+          MobileScanner(
+            onDetect: _onBarcodeDetect,
+            controller: _mobileScannerController,
           ),
           Positioned(
             top: 16,
             child: SizedBox(
-              child: AdWidget(ad: _bannerAd),
               width: _bannerAd.size.width.toDouble(),
               height: _bannerAd.size.height.toDouble(),
+              child: AdWidget(ad: _bannerAd),
             ),
           ),
           Positioned(
@@ -134,43 +131,69 @@ class _ScanScreenState extends State<ScanScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                IconButton(
-                  icon: Icon(
-                    _isFlashlightOff ? Icons.flash_off : Icons.flash_on,
+                Container(
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(0, 0, 0, 0.5),
+                    borderRadius: BorderRadius.circular(100),
                   ),
-                  color: Colors.white,
-                  onPressed: _toggleCameraFlash,
+                  child: IconButton(
+                    icon: ValueListenableBuilder(
+                      valueListenable: _mobileScannerController.torchState,
+                      builder: (_, torchState, __) {
+                        switch (torchState) {
+                          case TorchState.off:
+                            return const Icon(Icons.flash_on);
+                          case TorchState.on:
+                            return const Icon(Icons.flash_off);
+                        }
+                      },
+                    ),
+                    color: Colors.white,
+                    onPressed: _toggleCameraFlash,
+                  ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.cameraswitch),
-                  color: Colors.white,
-                  onPressed: _flipCamera,
+                Container(
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(0, 0, 0, 0.5),
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(Icons.cameraswitch),
+                    color: Colors.white,
+                    onPressed: _flipCamera,
+                  ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.photo_library),
-                  color: Colors.white,
-                  disabledColor: const Color.fromRGBO(255, 255, 255, 0.3),
-                  onPressed: _scanImageFromGallery,
+                Container(
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(0, 0, 0, 0.5),
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(Icons.photo_library),
+                    color: Colors.white,
+                    onPressed: _scanImageFromGallery,
+                  ),
                 ),
               ],
             ),
           ),
         ],
       );
-    else if (_cameraPermissionStatus.isDenied)
+    } else if (_cameraPermissionStatus.isDenied) {
       return Center(child: GrantPermissionButton(_requestCameraPermission));
-    else
-      return Center(
-        child: const Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40),
-          child: const Text(
+    } else {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 40),
+          child: Text(
             'Please grant camera permission to scan QR codes.',
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.white,
               fontSize: 20,
             ),
           ),
         ),
       );
+    }
   }
 }
