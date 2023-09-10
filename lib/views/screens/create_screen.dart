@@ -3,29 +3,30 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:qrcoder/utils/constants.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:qrcoder/views/widgets/input.dart';
 import 'package:qrcoder/views/widgets/save_button.dart';
 
 class CreateScreen extends StatefulWidget {
-  const CreateScreen();
+  const CreateScreen({super.key});
 
   @override
-  _CreateScreenState createState() => _CreateScreenState();
+  State<CreateScreen> createState() => _CreateScreenState();
 }
 
 class _CreateScreenState extends State<CreateScreen> {
   final TextEditingController _textEditingController = TextEditingController();
   final ScreenshotController _screenshotController = ScreenshotController();
+
   final BannerAd _bannerAd = BannerAd(
-    adUnitId: dotenv.env['BANNER_AD_UNIT_ID']!,
+    adUnitId: Constants.bannerAdId,
     size: AdSize.banner,
-    request: AdRequest(),
-    listener: BannerAdListener(),
+    request: const AdRequest(),
+    listener: const BannerAdListener(),
   );
 
   PermissionStatus _storagePermissionStatus = PermissionStatus.denied;
@@ -44,7 +45,7 @@ class _CreateScreenState extends State<CreateScreen> {
     await Permission.storage
         .request()
         .then((PermissionStatus permissionStatus) => {
-              this.setState(() {
+              setState(() {
                 _storagePermissionStatus = permissionStatus;
               }),
             });
@@ -52,23 +53,27 @@ class _CreateScreenState extends State<CreateScreen> {
 
   void _saveQrCode() {
     if (_storagePermissionStatus.isGranted &&
-        _textEditingController.text.isNotEmpty)
-      _screenshotController.capture().then((Uint8List? qrcodeImage) async {
-        if (qrcodeImage != null) {
-          final String captureTimestamp = new DateTime.now().toString();
+        _textEditingController.text.isNotEmpty) {
+      _screenshotController.capture().then((Uint8List? qrCodeImage) async {
+        if (qrCodeImage != null) {
+          final String captureTimestamp = DateTime.now().toString();
           await ImageGallerySaver.saveImage(
-            Uint8List.fromList(qrcodeImage),
+            Uint8List.fromList(qrCodeImage),
             quality: 100,
             name: captureTimestamp,
           );
-          _notifyUserWithSnackBar('QR code saved in your gallery!', 1500);
+          _notifyUserWithSnackBar('QR Code saved in your gallery!', 1500);
         }
       });
-    else
+    } else {
       _requestStoragePermission();
-    if (_storagePermissionStatus.isPermanentlyDenied)
+    }
+    if (_storagePermissionStatus.isPermanentlyDenied) {
       _notifyUserWithSnackBar(
-          'Please grant storage permission to save QR codes.', 4000);
+        'Please grant storage permission to save QR Codes.',
+        4000,
+      );
+    }
   }
 
   void _refreshOnTextFieldTextChange() {
@@ -103,9 +108,9 @@ class _CreateScreenState extends State<CreateScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         SizedBox(
-          child: AdWidget(ad: _bannerAd),
           width: _bannerAd.size.width.toDouble(),
           height: _bannerAd.size.height.toDouble(),
+          child: AdWidget(ad: _bannerAd),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -114,7 +119,7 @@ class _CreateScreenState extends State<CreateScreen> {
         const SizedBox(height: 20),
         Screenshot(
           controller: _screenshotController,
-          child: QrImage(
+          child: QrImageView(
             data: _textEditingController.text,
             size: 250,
             backgroundColor: Colors.white,
