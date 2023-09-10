@@ -6,8 +6,8 @@
 
 </p>
 
-![version](https://img.shields.io/badge/Version-1.3.2-C00C00)
-![flutter](https://img.shields.io/badge/Flutter-2.10.4-1389FD)
+![version](https://img.shields.io/badge/Version-1.4.2-C00C00)
+![flutter](https://img.shields.io/badge/Flutter-3.13.3-1389FD)
 
 <a style="outline: none;" href='https://play.google.com/store/apps/details?id=com.FelipsTudio.qrcoder&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
 
@@ -65,4 +65,4 @@
 
 <img src="https://user-images.githubusercontent.com/56811005/103469908-d5367780-4d49-11eb-8c56-db348eff1989.png" width="700" >
 
-> © 2021 Felip's Tudio. All rights reserved
+> © 2023 Felipe Pereira. All rights reserved.
