@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class Input extends StatelessWidget {
+  const Input(this._textEditingController, this._saveQrCode, {super.key});
+
   final TextEditingController _textEditingController;
   final VoidCallback _saveQrCode;
-
-  const Input(this._textEditingController, this._saveQrCode);
 
   @override
   Widget build(BuildContext context) {

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
 class GrantPermissionButton extends StatelessWidget {
+  const GrantPermissionButton(this._requestCameraPermission, {super.key});
   final VoidCallback _requestCameraPermission;
-
-  const GrantPermissionButton(this._requestCameraPermission);
 
   @override
   Widget build(BuildContext context) {

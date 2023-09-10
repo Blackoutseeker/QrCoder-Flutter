@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SaveButton extends StatelessWidget {
+  const SaveButton(this._saveQrCode, {super.key});
   final VoidCallback _saveQrCode;
-
-  const SaveButton(this._saveQrCode);
 
   @override
   Widget build(BuildContext context) {
@@ -19,13 +18,13 @@ class SaveButton extends StatelessWidget {
       ),
       child: Row(
         children: <Widget>[
-          Expanded(
-            child: Container(
+          const Expanded(
+            child: SizedBox(
               height: 50,
-              child: const Center(
-                child: const Text(
+              child: Center(
+                child: Text(
                   'Save',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
                     fontSize: 22,
                   ),
@@ -38,7 +37,7 @@ class SaveButton extends StatelessWidget {
             width: 50,
             color: const Color.fromRGBO(0, 0, 0, 0.5),
             child: const Center(
-              child: const Icon(Icons.save),
+              child: Icon(Icons.save),
             ),
           ),
         ],

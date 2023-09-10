@@ -4,7 +4,7 @@ import 'package:qrcoder/views/screens/scan_screen.dart';
 import 'package:qrcoder/views/screens/create_screen.dart';
 
 class TabControllerWrapper extends StatelessWidget {
-  const TabControllerWrapper();
+  const TabControllerWrapper({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,19 +14,17 @@ class TabControllerWrapper extends StatelessWidget {
         appBar: AppBar(
           toolbarHeight: 0,
           bottom: const TabBar(
-            indicatorPadding: const EdgeInsets.symmetric(
-              horizontal: 20,
-            ),
-            tabs: const <Tab>[
-              const Tab(text: 'SCAN'),
-              const Tab(text: 'CREATE'),
+            indicatorPadding: EdgeInsets.symmetric(horizontal: 20),
+            tabs: <Tab>[
+              Tab(text: 'SCAN'),
+              Tab(text: 'CREATE'),
             ],
           ),
         ),
         body: const TabBarView(
-          children: const <Widget>[
-            const ScanScreen(),
-            const CreateScreen(),
+          children: <Widget>[
+            ScanScreen(),
+            CreateScreen(),
           ],
         ),
       ),
